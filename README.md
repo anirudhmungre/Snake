@@ -1,2 +1,2 @@
 # Snake
-Snake Game built in p5 for python
+Snake Game built in p5 for JavaScript
