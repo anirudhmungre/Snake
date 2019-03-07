@@ -1,17 +1,24 @@
 var s = [],
     food,
-    dir = 1,
+    dir,
     dead,
     score,
     dimentionW,
-    dimentionH;
+    dimentionH,
+    paused,
+    w,
+    h;
 
 function restart() {
+    food = undefined;
+    dir = 1;
     dead = false;
     score = 0;
-    food = undefined;
+    paused = false;
     s = [];
-    addPart(width/2 - (width/2)%10, height/2 - (height/2)%10);
+    addPart(w / 2 - (w / 2) % 10, h / 2 - (h / 2) % 10);
+    addPart(w / 2 - (w / 2) % 10, h / 2 - (h / 2) % 10);
+    addPart(w / 2 - (w / 2) % 10, h / 2 - (h / 2) % 10);
     initFood();
 }
 function setup() {
@@ -19,7 +26,9 @@ function setup() {
     dimentionH = (windowHeight) - (windowHeight) % 10;
     // console.log(dimentionW + " " + dimentionH);
     createCanvas(dimentionW, dimentionH);
-    frameRate(15);
+    w = width;
+    h = height;
+    frameRate(20);
     background(51);
     restart();
 }
@@ -29,19 +38,20 @@ function draw() {
         // console.log("ALIVE")
         update();
         showScore();
+        show();
     }
     else {
         // console.log("DEAD")
+        show();
         fill(255);
         textAlign(CENTER, BOTTOM);
         textSize(50);
-        text("YOU LOSE!", width/2, height/2);
+        text("YOU LOSE!", width / 2, height / 2);
         textAlign(CENTER, TOP);
         textSize(20);
-        text("Score: " + score, width/2, height/2);
-        text("To restart press \'r\'", width/2, 0);
+        text("Score: " + score, width / 2, height / 2);
+        text("To restart press \'r\'", width / 2, 0);
     }
-    show();
 }
 function keyPressed() {
     switch (keyCode) {
@@ -68,7 +78,11 @@ function keyPressed() {
         case 82:
             restart();
             break;
+        case 80:
+            pause();
+            break;
         default:
+            console.log(keyCode);
             break;
     }
 }
@@ -105,11 +119,10 @@ function checkCollision() {
             dead = true;
         }
     }
-    if (s[0].getX() < 0 || s[0].getX() > width - 10 ||
-        s[0].getY() < 0 || s[0].getY() > height - 10) {
+    if (s[0].getX() < 0 || s[0].getX() > w - 10 ||
+        s[0].getY() < 0 || s[0].getY() > h - 10) {
         dead = true;
     }
-    else { checkFood(); }
 }
 function initFood() {
     let x = int(random(0, (dimentionW - 20) / 10)) * 10;
@@ -118,17 +131,23 @@ function initFood() {
     food = new Food(x, y);
 }
 function setFood() {
-    let x = int(random(0, (dimentionW - 20) / 10)) * 10;
-    let y = int(random(0, (dimentionH - 30) / 10)) * 10;
+    let x = p5.prototype.int(p5.prototype.random(0, (dimentionW - 20) / 10)) * 10;
+    let y = p5.prototype.int(p5.prototype.random(0, (dimentionH - 30) / 10)) * 10;
     food.setX(x);
     food.setY(y);
 }
 function checkFood() {
     if (s[0].getX() == food.getX() &&
         s[0].getY() == food.getY()) {
+        newPoint();
+        setFood();
+    }
+}
+function newPoint(num){
+    if (num==undefined) { num = 1; }
+    for (let i = 0; i < num; i++){
         score++;
         addPart(s[0].getX(), s[0].getY());
-        setFood();
     }
 }
 function show() {
@@ -141,5 +160,15 @@ function showScore() {
     textAlign(CENTER);
     fill(255);
     textSize(20);
-    text("Score: " + score, width/2, height-20);
+    text("Score: " + score, width / 2, height - 20);
+}
+function pause() {
+    if (!paused) { 
+        p5.prototype.noLoop(); 
+        paused = true;
+    }
+    else { 
+        p5.prototype.loop(); 
+        paused = false;
+    }
 }
