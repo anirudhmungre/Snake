@@ -7,7 +7,8 @@ var s = [],
     dimentionH,
     paused,
     w,
-    h;
+    h,
+    img;
 
 function restart() {
     food = undefined;
@@ -15,6 +16,7 @@ function restart() {
     dead = false;
     score = 0;
     paused = false;
+    img = loadImage('../assets/azim.jpg');
     s = [];
     addPart(w / 2 - (w / 2) % 10, h / 2 - (h / 2) % 10);
     addPart(w / 2 - (w / 2) % 10, h / 2 - (h / 2) % 10);
@@ -110,7 +112,6 @@ function update() {
     }
     checkCollision();
     checkFood();
-    // show();
 }
 function checkCollision() {
     for (let i = 1; i < s.length; i++) {
@@ -139,6 +140,7 @@ function setFood() {
 function checkFood() {
     if (s[0].getX() == food.getX() &&
         s[0].getY() == food.getY()) {
+        // background(img)
         newPoint();
         setFood();
     }

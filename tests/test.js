@@ -21,7 +21,6 @@ function reset() {
 describe("Add part", function () {
     beforeEach(() => reset());
     it("Makes snake longer by 1", function () {
-        // reset();
         let initLen = s.length
         addPart(0, 0);
         assert.equal(s.length, initLen + 1);
